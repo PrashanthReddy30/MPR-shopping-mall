@@ -17,11 +17,11 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQty, on
 
   // Apply promo code
   const applyPromo = () => {
-    if (promoCode.trim().toUpperCase() === 'KLM10') {
+    if (promoCode.trim().toUpperCase() === 'MPR10') {
       setAppliedDiscount(10);
-      setPromoMessage('🎉 Promocode KLM10 applied! 10% Discount saved.');
+      setPromoMessage('🎉 Promocode MPR10 applied! 10% Discount saved.');
     } else {
-      setPromoMessage('❌ Invalid promocode. Try code KLM10.');
+      setPromoMessage('❌ Invalid promocode. Try code MPR10.');
     }
   };
 
@@ -91,7 +91,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQty, on
                 </div>
                 <h3 style={{ fontFamily: 'var(--serif)', fontSize: '24px', fontWeight: 600 }}>Order Placed!</h3>
                 <p style={{ color: 'var(--royal-gray)', fontSize: '14px' }}>
-                  Thank you for shopping with **KLM Shopping Mall**! Your order has been registered successfully. A confirmation text was sent to your phone.
+                  Thank you for shopping with **MPR Shopping Mall**! Your order has been registered successfully. A confirmation text was sent to your phone.
                 </p>
               </div>
             ) : cartItems.length === 0 ? (
@@ -141,7 +141,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQty, on
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input 
                   type="text" 
-                  placeholder="Enter Promo Code (KLM10)" 
+                  placeholder="Enter Promo Code (MPR10)" 
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                   style={{

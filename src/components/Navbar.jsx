@@ -15,7 +15,7 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} style={{ color: 'var(--primary-gold)' }} /> Narsampet, Telangana</span>
           </div>
           <div style={{ color: 'var(--primary-gold)', fontWeight: 500, letterSpacing: '0.5px' }}>
-            🎉 SPECIAL OFFER: Flat 10% OFF on Wedding Silk Sarees! Code: KLM10
+            🎉 SPECIAL OFFER: Flat 10% OFF on Wedding Silk Sarees! Code: MPR10
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
               K
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '1px', color: 'var(--royal-dark)', fontFamily: 'var(--sans)', lineHeight: '1.1' }}>KLM</span>
+              <span style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '1px', color: 'var(--royal-dark)', fontFamily: 'var(--sans)', lineHeight: '1.1' }}>MPR</span>
               <span style={{ fontSize: '11px', color: 'var(--primary-gold)', textTransform: 'uppercase', letterSpacing: '3px', fontWeight: 600 }}>Shopping Mall</span>
             </div>
           </a>

@@ -16,7 +16,7 @@ export default function Footer() {
                 K
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '20px', fontWeight: 800, color: '#fff', fontFamily: 'var(--sans)', lineHeight: '1.1' }}>KLM</span>
+                <span style={{ fontSize: '20px', fontWeight: 800, color: '#fff', fontFamily: 'var(--sans)', lineHeight: '1.1' }}>MPR</span>
                 <span style={{ fontSize: '10px', color: 'var(--primary-gold)', textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 600 }}>Shopping Mall</span>
               </div>
             </a>
@@ -71,7 +71,7 @@ export default function Footer() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                 <MapPin size={18} style={{ color: 'var(--primary-gold)', flexShrink: 0, marginTop: '2px' }} />
                 <span>
-                  <strong>KLM Shopping Mall</strong><br/>
+                  <strong>MPR Shopping Mall</strong><br/>
                   Main Road, Near Bus Stand,<br/>
                   Narsampet, Warangal (Dist),<br/>
                   Telangana - 506132
@@ -83,7 +83,7 @@ export default function Footer() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Mail size={16} style={{ color: 'var(--primary-gold)' }} />
-                <span>info@klmshoppingmall.com</span>
+                <span>info@mprshoppingmall.com</span>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: 600, fontFamily: 'var(--sans)', position: 'relative', paddingBottom: '8px' }} className="footer-title-line">Newsletter</h4>
             <p style={{ fontSize: '13px', lineHeight: '1.6' }}>Subscribe to get alerts on new festive arrivals, fashion shows, and weekend shopping sales.</p>
-            <form onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing to KLM News!'); }} style={{ display: 'flex', gap: '6px' }}>
+            <form onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing to MPR News!'); }} style={{ display: 'flex', gap: '6px' }}>
               <input 
                 type="email" 
                 placeholder="Your email address" 
@@ -128,7 +128,7 @@ export default function Footer() {
 
         {/* Bottom copyright */}
         <div style={{ borderTop: '1px solid #2b2d31', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', fontSize: '12px' }}>
-          <span>&copy; {new Date().getFullYear()} KLM Shopping Mall. All Rights Reserved.</span>
+          <span>&copy; {new Date().getFullYear()} MPR Shopping Mall. All Rights Reserved.</span>
           <span>Best Family Fashion Mall in Narsampet, Telangana</span>
         </div>
 

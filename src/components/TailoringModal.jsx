@@ -83,7 +83,7 @@ export default function TailoringModal({ isOpen, onClose }) {
             </div>
             <div>
               <h3 style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: 600, color: 'var(--royal-dark)', margin: 0 }}>Custom Tailoring Desk</h3>
-              <p style={{ color: 'var(--royal-gray)', fontSize: '13px', margin: 0 }}>Premium Stitching & Fitting by KLM Designers</p>
+              <p style={{ color: 'var(--royal-gray)', fontSize: '13px', margin: 0 }}>Premium Stitching & Fitting by MPR Designers</p>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export default function TailoringModal({ isOpen, onClose }) {
               <h4 style={{ fontFamily: 'var(--serif)', fontSize: '20px', fontWeight: 600 }}>Stitching Slot Booked!</h4>
               <p style={{ color: 'var(--royal-gray)', fontSize: '14px' }}>
                 Our designer will call you within 24 hours to finalize your style, collect fabric (or measurements), and arrange fitting. 
-                <br/><strong>Location Drop-off:</strong> KLM Mall, Main Road, Narsampet.
+                <br/><strong>Location Drop-off:</strong> MPR Mall, Main Road, Narsampet.
               </p>
             </div>
           ) : (
