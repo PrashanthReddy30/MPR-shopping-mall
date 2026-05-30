@@ -86,10 +86,18 @@ export default function App() {
     <>
       {/* Navigation Header */}
       <Navbar 
+        activeCategory={activeCategory}
         cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         wishlistCount={wishlist.length}
         onCartClick={() => setCartOpen(true)}
         onTailoringClick={() => setTailoringOpen(true)}
+        onSelectCategory={(category) => {
+          setActiveCategory(category);
+          // Scroll smoothly to shop section
+          setTimeout(() => {
+            document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
       />
 
       {/* Hero Banner Slider */}

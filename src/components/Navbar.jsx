@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, ShoppingBag, Heart, Scissors, MapPin, Phone, Menu, X } from 'lucide-react';
 
-export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailoringClick }) {
+export default function Navbar({ activeCategory, cartCount, wishlistCount, onCartClick, onTailoringClick, onSelectCategory }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
@@ -9,7 +9,7 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
     <header style={{ width: '100%', position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'var(--bg-white)', boxShadow: 'var(--shadow-sm)' }}>
       {/* Top Announcement Bar */}
       <div style={{ backgroundColor: 'var(--royal-dark)', color: 'var(--bg-white)', fontSize: '12px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="container" style={{ display: 'flex', justifyContent: 'between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Phone size={12} style={{ color: 'var(--primary-gold)' }} /> +91 99001 12230</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} style={{ color: 'var(--primary-gold)' }} /> Narsampet, Telangana</span>
@@ -25,12 +25,12 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           
           {/* Mobile Menu Button */}
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ display: 'none', color: 'var(--royal-dark)' }} className="mobile-menu-btn-style">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ color: 'var(--royal-dark)' }} className="mobile-menu-btn-style">
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           {/* Logo */}
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <a href="#" onClick={(e) => { e.preventDefault(); onSelectCategory('all'); }} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '40px', height: '40px', backgroundColor: 'var(--primary-red)', borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontSize: '20px', fontWeight: 'bold', fontFamily: 'var(--serif)' }}>
               K
             </div>
@@ -42,13 +42,13 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
 
           {/* Desktop Navigation Links */}
           <nav className="desktop-nav" style={{ display: 'flex', gap: '28px', fontSize: '14px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            <a href="#" style={{ color: 'var(--primary-red)' }}>Home</a>
-            <a href="#sarees" className="nav-hover">Silk Sarees</a>
-            <a href="#lehengas" className="nav-hover">Lehengas</a>
-            <a href="#kurtis" className="nav-hover">Kurtis</a>
-            <a href="#men" className="nav-hover">Men's Wear</a>
-            <a href="#kids" className="nav-hover">Kids</a>
-            <a href="#offers" className="nav-hover">Offers</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('all'); }} style={{ color: activeCategory === 'all' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Home</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('sarees'); }} style={{ color: activeCategory === 'sarees' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Silk Sarees</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('lehengas'); }} style={{ color: activeCategory === 'lehengas' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Lehengas</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('kurtis'); }} style={{ color: activeCategory === 'kurtis' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Kurtis</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('men'); }} style={{ color: activeCategory === 'men' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Men's Wear</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('kids'); }} style={{ color: activeCategory === 'kids' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Kids</a>
+            <a href="#shop" onClick={(e) => { e.preventDefault(); onSelectCategory('offers'); }} style={{ color: activeCategory === 'offers' ? 'var(--primary-red)' : 'var(--royal-dark)' }} className="nav-hover">Offers</a>
           </nav>
 
           {/* Header Action Items */}
@@ -105,13 +105,13 @@ export default function Navbar({ cartCount, wishlistCount, onCartClick, onTailor
       {/* Mobile Drawer Navigation Menu */}
       {mobileMenuOpen && (
         <div style={{ backgroundColor: 'var(--bg-white)', borderBottom: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', padding: '16px 24px', gap: '12px', animation: 'fadeIn 0.3s ease-out' }}>
-          <a href="#" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Home</a>
-          <a href="#sarees" onClick={() => setMobileMenuOpen(false)}>Silk Sarees</a>
-          <a href="#lehengas" onClick={() => setMobileMenuOpen(false)}>Lehengas</a>
-          <a href="#kurtis" onClick={() => setMobileMenuOpen(false)}>Kurtis</a>
-          <a href="#men" onClick={() => setMobileMenuOpen(false)}>Men's Wear</a>
-          <a href="#kids" onClick={() => setMobileMenuOpen(false)}>Kids</a>
-          <a href="#offers" onClick={() => setMobileMenuOpen(false)}>Offers</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('all'); }} style={{ fontWeight: 600, color: activeCategory === 'all' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Home</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('sarees'); }} style={{ color: activeCategory === 'sarees' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Silk Sarees</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('lehengas'); }} style={{ color: activeCategory === 'lehengas' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Lehengas</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('kurtis'); }} style={{ color: activeCategory === 'kurtis' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Kurtis</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('men'); }} style={{ color: activeCategory === 'men' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Men's Wear</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('kids'); }} style={{ color: activeCategory === 'kids' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Kids</a>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); onSelectCategory('offers'); }} style={{ color: activeCategory === 'offers' ? 'var(--primary-red)' : 'var(--royal-dark)' }}>Offers</a>
           <button 
             onClick={() => { setMobileMenuOpen(false); onTailoringClick(); }} 
             style={{ alignSelf: 'flex-start', border: '1px solid var(--primary-gold)', color: 'var(--primary-gold)', padding: '8px 16px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}

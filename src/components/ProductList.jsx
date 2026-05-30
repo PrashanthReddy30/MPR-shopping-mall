@@ -323,7 +323,9 @@ export default function ProductList({ activeCategory, setActiveCategory, onProdu
   // Filter products by category
   const filteredProducts = activeCategory === "all" 
     ? productsData 
-    : productsData.filter(p => p.category === activeCategory);
+    : activeCategory === "offers"
+      ? productsData.filter(p => p.price < p.originalPrice)
+      : productsData.filter(p => p.category === activeCategory);
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -341,7 +343,7 @@ export default function ProductList({ activeCategory, setActiveCategory, onProdu
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '40px', borderBottom: '1px solid var(--border-light)', paddingBottom: '20px' }}>
           {/* Navigation Filter Tabs */}
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            {["all", "sarees", "lehengas", "kurtis", "men", "kids"].map(tab => (
+            {["all", "sarees", "lehengas", "kurtis", "men", "kids", "offers"].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveCategory(tab)}
@@ -359,7 +361,7 @@ export default function ProductList({ activeCategory, setActiveCategory, onProdu
                   cursor: 'pointer'
                 }}
               >
-                {tab === "men" ? "Men's Wear" : tab === "all" ? "All Fashion" : tab}
+                {tab === "men" ? "Men's Wear" : tab === "all" ? "All Fashion" : tab === "offers" ? "Special Offers" : tab}
               </button>
             ))}
           </div>
