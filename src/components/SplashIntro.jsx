@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const ZipperPuller = () => (
   <svg width="45" height="65" viewBox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 4px 8px rgba(0,0,0,0.4))' }}>
@@ -23,6 +23,55 @@ export default function SplashIntro({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [logoVisible, setLogoVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const hasSpoken = useRef(false);
+
+  // Pre-fetch voices to trigger browser synthesis engine initialization
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
+
+  const speakWelcome = () => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    if (hasSpoken.current) return;
+    hasSpoken.current = true;
+
+    // Cancel any queued speech synthesis to prevent overlapping/delay issues
+    window.speechSynthesis.cancel();
+
+    // Spaced out letters "M P R" to ensure it spells it out clearly rather than saying it as a single word
+    const utterance = new SpeechSynthesisUtterance("Welcome to M P R Shopping Mall");
+    
+    // Attempt to locate a premium English female voice for elegance
+    const voices = window.speechSynthesis.getVoices();
+    const premiumVoice = voices.find(
+      (v) =>
+        v.lang.startsWith('en') &&
+        (v.name.toLowerCase().includes('female') ||
+         v.name.toLowerCase().includes('zira') ||
+         v.name.toLowerCase().includes('google') ||
+         v.name.toLowerCase().includes('hazel') ||
+         v.name.toLowerCase().includes('natural'))
+    );
+    
+    if (premiumVoice) {
+      utterance.voice = premiumVoice;
+    }
+    
+    utterance.rate = 0.82;  // Slightly slow & premium pace
+    utterance.pitch = 1.05; // Elegant welcoming pitch
+    
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleInteraction = () => {
+    // Override / play welcome greeting on click if browser autoplay blocked it
+    if (window.speechSynthesis && !window.speechSynthesis.speaking) {
+      hasSpoken.current = false; // Reset to allow force play
+      speakWelcome();
+    }
+  };
 
   useEffect(() => {
     // Phase 1: Animate Zipper from Left to Right
@@ -44,19 +93,21 @@ export default function SplashIntro({ onComplete }) {
   }, []);
 
   useEffect(() => {
+    // Trigger logo reveal & voice over at 80% progress (when zipper opens past middle)
     if (progress >= 80) {
       setLogoVisible(true);
+      speakWelcome();
     }
     
     if (progress === 100) {
       // Phase 2: Show logo name, then fade out the entire splash screen
       const exitTimer = setTimeout(() => {
         setExiting(true);
-      }, 2500); // Wait for logo display
+      }, 2700); // Wait for logo display & voice-over completion
 
       const completeTimer = setTimeout(() => {
         onComplete();
-      }, 3300); // Complete animation
+      }, 3500); // Complete animation transition
 
       return () => {
         clearTimeout(exitTimer);
@@ -71,6 +122,8 @@ export default function SplashIntro({ onComplete }) {
 
   return (
     <div 
+      onClick={handleInteraction}
+      onTouchStart={handleInteraction}
       style={{
         position: 'fixed',
         top: 0,
@@ -85,7 +138,8 @@ export default function SplashIntro({ onComplete }) {
         alignItems: 'center',
         opacity: exiting ? 0 : 1,
         transition: 'opacity 0.8s ease-in-out',
-        pointerEvents: exiting ? 'none' : 'auto'
+        pointerEvents: exiting ? 'none' : 'auto',
+        cursor: 'pointer' // Guide user that the page is clickable
       }}
     >
       {/* ------------------------------------------------------------- */}
@@ -213,8 +267,32 @@ export default function SplashIntro({ onComplete }) {
             Where Heritage Meets Luxury
           </p>
 
+          {/* Audio Tap Tip */}
+          <div 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginTop: '20px',
+              padding: '6px 14px',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(249, 179, 46, 0.08)',
+              border: '1px solid rgba(249, 179, 46, 0.15)',
+              fontSize: '12px',
+              color: 'rgba(249, 179, 46, 0.85)',
+              letterSpacing: '1.2px',
+              animation: 'pulseText 2s infinite ease-in-out'
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <span>Tap screen for sound / voice</span>
+          </div>
+
           {/* Loading Indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '30px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
             <div className="spinner" />
             <span style={{ fontSize: '11px', color: '#999', letterSpacing: '2px', textTransform: 'uppercase' }}>Opening Store...</span>
           </div>
@@ -342,6 +420,11 @@ export default function SplashIntro({ onComplete }) {
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+        @keyframes pulseText {
+          0% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.02); }
+          100% { opacity: 0.5; transform: scale(1); }
         }
       `}} />
     </div>
