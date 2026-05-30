@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, ShoppingBag, Heart, Scissors, MapPin, Phone, Menu, X } from 'lucide-react';
 
-export default function Navbar({ activeCategory, cartCount, wishlistCount, onCartClick, onTailoringClick, onSelectCategory }) {
+export default function Navbar({ activeCategory, cartCount, wishlistCount, onCartClick, onWishlistClick, onTailoringClick, onSelectCategory }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
@@ -11,8 +11,12 @@ export default function Navbar({ activeCategory, cartCount, wishlistCount, onCar
       <div style={{ backgroundColor: 'var(--royal-dark)', color: 'var(--bg-white)', fontSize: '12px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Phone size={12} style={{ color: 'var(--primary-gold)' }} /> +91 99001 12230</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} style={{ color: 'var(--primary-gold)' }} /> Narsampet, Telangana</span>
+            <a href="tel:+919900112230" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'inherit', textDecoration: 'none' }} className="nav-hover">
+              <Phone size={12} style={{ color: 'var(--primary-gold)' }} /> +91 99001 12230
+            </a>
+            <a href="https://maps.google.com/?q=MPR+Shopping+Mall+Narsampet+Telangana" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'inherit', textDecoration: 'none' }} className="nav-hover">
+              <MapPin size={12} style={{ color: 'var(--primary-gold)' }} /> Narsampet, Telangana
+            </a>
           </div>
           <div style={{ color: 'var(--primary-gold)', fontWeight: 500, letterSpacing: '0.5px' }}>
             🎉 SPECIAL OFFER: Flat 10% OFF on Wedding Silk Sarees! Code: MPR10
@@ -80,14 +84,14 @@ export default function Navbar({ activeCategory, cartCount, wishlistCount, onCar
             </div>
 
             {/* Wishlist */}
-            <a href="#wishlist" style={{ position: 'relative', color: 'var(--royal-dark)' }}>
+            <button onClick={onWishlistClick} style={{ position: 'relative', color: 'var(--royal-dark)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
               <Heart size={22} className="nav-hover" />
               {wishlistCount > 0 && (
                 <span style={{ position: 'absolute', top: '-6px', right: '-8px', backgroundColor: 'var(--primary-gold)', color: 'var(--royal-dark)', fontSize: '10px', fontWeight: 'bold', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   {wishlistCount}
                 </span>
               )}
-            </a>
+            </button>
 
             {/* Shopping Bag (Cart) */}
             <button onClick={onCartClick} style={{ position: 'relative', color: 'var(--royal-dark)' }}>

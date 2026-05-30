@@ -5,9 +5,11 @@ import CategoryGrid from './components/CategoryGrid';
 import ProductList from './components/ProductList';
 import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
+import WishlistDrawer from './components/WishlistDrawer';
 import TailoringModal from './components/TailoringModal';
 import Footer from './components/Footer';
 import SplashIntro from './components/SplashIntro';
+import { productsData } from './data/productsData';
 
 export default function App() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -19,6 +21,7 @@ export default function App() {
   
   // Wishlist state
   const [wishlist, setWishlist] = useState([]);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
   
   // Modal states
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -96,6 +99,7 @@ export default function App() {
         cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         wishlistCount={wishlist.length}
         onCartClick={() => setCartOpen(true)}
+        onWishlistClick={() => setWishlistOpen(true)}
         onTailoringClick={() => setTailoringOpen(true)}
         onSelectCategory={(category) => {
           setActiveCategory(category);
@@ -146,6 +150,15 @@ export default function App() {
         onUpdateQty={handleUpdateQty}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}
+      />
+
+      {/* Wishlist Slider Drawer */}
+      <WishlistDrawer 
+        isOpen={wishlistOpen}
+        onClose={() => setWishlistOpen(false)}
+        wishlistItems={productsData.filter(p => wishlist.includes(p.id))}
+        onRemoveItem={handleAddToWishlist}
+        onAddToCart={handleAddToCart}
       />
 
       {/* Custom Fitting / Stitching Modal */}

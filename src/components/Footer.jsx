@@ -68,7 +68,13 @@ export default function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: 600, fontFamily: 'var(--sans)', position: 'relative', paddingBottom: '8px' }} className="footer-title-line">Narsampet Branch</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <a 
+                href="https://maps.google.com/?q=MPR+Shopping+Mall+Narsampet+Telangana" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: 'inherit', textDecoration: 'none' }}
+                className="link-hover"
+              >
                 <MapPin size={18} style={{ color: 'var(--primary-gold)', flexShrink: 0, marginTop: '2px' }} />
                 <span>
                   <strong>MPR Shopping Mall</strong><br/>
@@ -76,11 +82,15 @@ export default function Footer() {
                   Narsampet, Warangal (Dist),<br/>
                   Telangana - 506132
                 </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              </a>
+              <a 
+                href="tel:+919900112230" 
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'inherit', textDecoration: 'none' }} 
+                className="link-hover"
+              >
                 <Phone size={16} style={{ color: 'var(--primary-gold)' }} />
                 <span>+91 99001 12230</span>
-              </div>
+              </a>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Mail size={16} style={{ color: 'var(--primary-gold)' }} />
                 <span>info@mprshoppingmall.com</span>
