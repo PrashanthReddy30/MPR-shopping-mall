@@ -23,6 +23,7 @@ export default function SplashIntro({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [logoVisible, setLogoVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const [started, setStarted] = useState(false);
   const voiceAudioRef = useRef(null);
   const bgAudioRef = useRef(null);
   const audioStartedRef = useRef(false);
@@ -120,7 +121,18 @@ export default function SplashIntro({ onComplete }) {
   };
 
   const handleInteraction = () => {
-    startAudio();
+    if (!started) {
+      setStarted(true);
+      // Pre-play background audio at volume 0 to activate AudioContext via user action
+      const bgAudio = bgAudioRef.current;
+      if (bgAudio) {
+        bgAudio.play().then(() => {
+          bgAudio.volume = 0;
+        }).catch(err => {
+          console.warn("Pre-play bgAudio blocked:", err);
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -141,6 +153,8 @@ export default function SplashIntro({ onComplete }) {
   }, [exiting]);
 
   useEffect(() => {
+    if (!started) return;
+
     // Phase 1: Animate Zipper from Left to Right
     const duration = 1600; // 1.6 seconds
     const intervalTime = 16; // ~60fps
@@ -157,7 +171,7 @@ export default function SplashIntro({ onComplete }) {
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [started]);
 
   useEffect(() => {
     // Trigger logo reveal & voice over at 80% progress (when zipper opens past middle)
@@ -209,6 +223,86 @@ export default function SplashIntro({ onComplete }) {
         cursor: 'pointer' // Guide user that the page is clickable
       }}
     >
+      {/* ------------------------------------------------------------- */}
+      {/* TAP TO UNVEIL OVERLAY                                         */}
+      {/* ------------------------------------------------------------- */}
+      {!started && (
+        <div 
+          style={{
+            position: 'absolute',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '15px',
+            backgroundColor: 'rgba(18, 3, 5, 0.94)',
+            padding: '35px 50px',
+            borderRadius: '20px',
+            border: '2px solid var(--primary-gold)',
+            boxShadow: '0 0 35px rgba(249, 179, 46, 0.4)',
+            textAlign: 'center',
+            maxWidth: '90%',
+            animation: 'pulseText 2.5s infinite ease-in-out',
+            boxSizing: 'border-box'
+          }}
+        >
+          <div style={{
+            fontSize: '14px',
+            fontFamily: 'var(--sans)',
+            color: 'rgba(255, 255, 255, 0.7)',
+            letterSpacing: '3px',
+            textTransform: 'uppercase'
+          }}>
+            Welcome to
+          </div>
+          <div style={{
+            fontSize: '28px',
+            fontFamily: 'var(--serif)',
+            color: 'var(--primary-gold)',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            backgroundImage: 'linear-gradient(to right, #ffe066, #f9b32e, #ffe066)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            margin: '5px 0'
+          }}>
+            MPR Shopping Mall
+          </div>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleInteraction();
+            }}
+            style={{
+              padding: '14px 32px',
+              backgroundColor: 'var(--primary-red)',
+              color: '#fff',
+              border: '2px solid var(--primary-gold)',
+              borderRadius: '30px',
+              fontFamily: 'var(--sans)',
+              fontSize: '14px',
+              fontWeight: 600,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              boxShadow: '0 6px 20px rgba(255, 25, 72, 0.4)',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              marginTop: '10px'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 25, 72, 0.6)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 25, 72, 0.4)';
+            }}
+          >
+            Enter Mall / ఓపెన్ చేయండి
+          </button>
+        </div>
+      )}
       {/* ------------------------------------------------------------- */}
       {/* BRAND REVEAL CONTENT (Underneath the panels)                  */}
       {/* ------------------------------------------------------------- */}
