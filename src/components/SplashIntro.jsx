@@ -23,55 +23,122 @@ export default function SplashIntro({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [logoVisible, setLogoVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
-  const hasSpoken = useRef(false);
+  const voiceAudioRef = useRef(null);
+  const bgAudioRef = useRef(null);
+  const audioStartedRef = useRef(false);
 
-  // Pre-fetch voices to trigger browser synthesis engine initialization
+  // Initialize audio elements on mount
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.getVoices();
+    if (typeof window !== 'undefined' && window.Audio) {
+      const bg = new Audio('/background.mp3');
+      bg.loop = true;
+      bg.volume = 0; // Starts at 0, fades in
+      bgAudioRef.current = bg;
+
+      const voice = new Audio('/welcome.mp3');
+      voice.volume = 0.95;
+      voiceAudioRef.current = voice;
     }
+
+    return () => {
+      if (bgAudioRef.current) {
+        bgAudioRef.current.pause();
+        bgAudioRef.current = null;
+      }
+      if (voiceAudioRef.current) {
+        voiceAudioRef.current.pause();
+        voiceAudioRef.current = null;
+      }
+    };
   }, []);
 
-  const speakWelcome = () => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    if (hasSpoken.current) return;
-    hasSpoken.current = true;
+  const startAudio = () => {
+    if (audioStartedRef.current) return;
+    audioStartedRef.current = true;
 
-    // Cancel any queued speech synthesis to prevent overlapping/delay issues
-    window.speechSynthesis.cancel();
+    const bgAudio = bgAudioRef.current;
+    const voiceAudio = voiceAudioRef.current;
 
-    // Spaced out letters "M P R" to ensure it spells it out clearly rather than saying it as a single word
-    const utterance = new SpeechSynthesisUtterance("Welcome to M P R Shopping Mall");
-    
-    // Attempt to locate a premium English female voice for elegance
-    const voices = window.speechSynthesis.getVoices();
-    const premiumVoice = voices.find(
-      (v) =>
-        v.lang.startsWith('en') &&
-        (v.name.toLowerCase().includes('female') ||
-         v.name.toLowerCase().includes('zira') ||
-         v.name.toLowerCase().includes('google') ||
-         v.name.toLowerCase().includes('hazel') ||
-         v.name.toLowerCase().includes('natural'))
-    );
-    
-    if (premiumVoice) {
-      utterance.voice = premiumVoice;
-    }
-    
-    utterance.rate = 0.82;  // Slightly slow & premium pace
-    utterance.pitch = 1.05; // Elegant welcoming pitch
-    
-    window.speechSynthesis.speak(utterance);
+    if (!bgAudio || !voiceAudio) return;
+
+    // Start playing background music
+    bgAudio.play().then(() => {
+      // Fade in background music to 0.35 over 600ms
+      let vol = 0;
+      const fadeIn = setInterval(() => {
+        if (!bgAudioRef.current) {
+          clearInterval(fadeIn);
+          return;
+        }
+        vol += 0.05;
+        if (vol >= 0.35) {
+          bgAudio.volume = 0.35;
+          clearInterval(fadeIn);
+        } else {
+          bgAudio.volume = vol;
+        }
+      }, 50);
+
+      // Duck background music and play voice-over welcome greeting
+      setTimeout(() => {
+        if (!bgAudioRef.current || !voiceAudioRef.current) return;
+
+        // Duck music volume to 0.1
+        bgAudio.volume = 0.1;
+
+        // Play the voice audio file
+        voiceAudio.play().then(() => {
+          // Once voice greeting ends, restore background music to its full volume
+          voiceAudio.onended = () => {
+            if (!bgAudioRef.current) return;
+            let volRestored = 0.1;
+            const fadeUp = setInterval(() => {
+              if (!bgAudioRef.current) {
+                clearInterval(fadeUp);
+                return;
+              }
+              volRestored += 0.05;
+              if (volRestored >= 0.4) {
+                bgAudio.volume = 0.4;
+                clearInterval(fadeUp);
+              } else {
+                bgAudio.volume = volRestored;
+              }
+            }, 50);
+          };
+        }).catch(err => {
+          console.warn("Voice play blocked:", err);
+          // If voice failed to play, restore bg music volume immediately
+          bgAudio.volume = 0.4;
+        });
+      }, 800); // Trigger voice over after background music establishes
+    }).catch(err => {
+      console.warn("Background music play blocked:", err);
+      // Allow retry if play failed
+      audioStartedRef.current = false;
+    });
   };
 
   const handleInteraction = () => {
-    // Override / play welcome greeting on click if browser autoplay blocked it
-    if (window.speechSynthesis && !window.speechSynthesis.speaking) {
-      hasSpoken.current = false; // Reset to allow force play
-      speakWelcome();
-    }
+    startAudio();
   };
+
+  useEffect(() => {
+    if (exiting && bgAudioRef.current) {
+      const bgAudio = bgAudioRef.current;
+      let vol = bgAudio.volume;
+      const fadeOut = setInterval(() => {
+        vol -= 0.05;
+        if (vol <= 0) {
+          bgAudio.volume = 0;
+          bgAudio.pause();
+          clearInterval(fadeOut);
+        } else {
+          bgAudio.volume = vol;
+        }
+      }, 50);
+    }
+  }, [exiting]);
 
   useEffect(() => {
     // Phase 1: Animate Zipper from Left to Right
@@ -96,7 +163,7 @@ export default function SplashIntro({ onComplete }) {
     // Trigger logo reveal & voice over at 80% progress (when zipper opens past middle)
     if (progress >= 80) {
       setLogoVisible(true);
-      speakWelcome();
+      startAudio();
     }
     
     if (progress === 100) {
