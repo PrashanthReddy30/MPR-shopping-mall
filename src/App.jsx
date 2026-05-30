@@ -7,8 +7,10 @@ import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import TailoringModal from './components/TailoringModal';
 import Footer from './components/Footer';
+import SplashIntro from './components/SplashIntro';
 
 export default function App() {
+  const [introComplete, setIntroComplete] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   
   // Shopping Cart state
@@ -81,6 +83,10 @@ export default function App() {
       }
     });
   };
+
+  if (!introComplete) {
+    return <SplashIntro onComplete={() => setIntroComplete(true)} />;
+  }
 
   return (
     <>
